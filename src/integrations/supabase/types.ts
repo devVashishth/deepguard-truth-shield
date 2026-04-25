@@ -14,7 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analyses: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          id: string
+          input_preview: string | null
+          media_url: string | null
+          result: Json
+          title: string | null
+          type: Database["public"]["Enums"]["analysis_type"]
+          user_id: string
+          verdict: Database["public"]["Enums"]["verdict_type"] | null
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          input_preview?: string | null
+          media_url?: string | null
+          result?: Json
+          title?: string | null
+          type: Database["public"]["Enums"]["analysis_type"]
+          user_id: string
+          verdict?: Database["public"]["Enums"]["verdict_type"] | null
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          input_preview?: string | null
+          media_url?: string | null
+          result?: Json
+          title?: string | null
+          type?: Database["public"]["Enums"]["analysis_type"]
+          user_id?: string
+          verdict?: Database["public"]["Enums"]["verdict_type"] | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +88,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      analysis_type: "image" | "video" | "fakenews" | "emotion" | "webcam"
+      verdict_type: "real" | "fake" | "uncertain"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +216,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      analysis_type: ["image", "video", "fakenews", "emotion", "webcam"],
+      verdict_type: ["real", "fake", "uncertain"],
+    },
   },
 } as const
