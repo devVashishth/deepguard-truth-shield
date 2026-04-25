@@ -1,0 +1,4 @@
+project_id = "deepguard"
+
+[functions.analyze]
+verify_jwt = false
