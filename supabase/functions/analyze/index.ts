@@ -244,6 +244,48 @@ serve(async (req) => {
       });
     }
 
+    // ---- EfficientNetB3 external model for image / webcam ----
+    const DEEPFAKE_API_URL = Deno.env.get("DEEPFAKE_API_URL");
+    if (DEEPFAKE_API_URL && (payload.type === "image" || payload.type === "webcam") && payload.imageUrl) {
+      try {
+        const DEEPFAKE_API_KEY = Deno.env.get("DEEPFAKE_API_KEY");
+        const mlResp = await fetch(DEEPFAKE_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(DEEPFAKE_API_KEY ? { Authorization: `Bearer ${DEEPFAKE_API_KEY}` } : {}),
+          },
+          body: JSON.stringify({ image_url: payload.imageUrl }),
+        });
+        if (mlResp.ok) {
+          const ml = await mlResp.json();
+          const verdict = ml.verdict ?? (ml.label === "AI Generated" ? "fake" : "real");
+          const confidence = typeof ml.confidence === "number" ? ml.confidence : 0;
+          const aiLikelihood =
+            typeof ml.ai_generated_likelihood === "number" ? ml.ai_generated_likelihood : confidence;
+          const result = {
+            verdict,
+            confidence,
+            summary:
+              ml.label === "AI Generated"
+                ? `EfficientNetB3 classified this image as AI-generated (${aiLikelihood.toFixed(1)}% likelihood).`
+                : `EfficientNetB3 classified this image as a real photograph (${confidence.toFixed(1)}% confidence).`,
+            artifacts: ml.artifacts ?? [],
+            regions: ml.regions ?? [],
+            face_present: ml.face_present ?? null,
+            ai_generated_likelihood: aiLikelihood,
+            model: ml.model ?? "EfficientNetB3",
+          };
+          return new Response(JSON.stringify({ type: payload.type, result }), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        console.error("DEEPFAKE_API_URL responded non-OK, falling back to Gemini", mlResp.status);
+      } catch (e) {
+        console.error("DEEPFAKE_API_URL call failed, falling back to Gemini", e);
+      }
+    }
+
     const tool = buildSchemaTool(payload.type);
     const messages = buildMessages(payload);
 
