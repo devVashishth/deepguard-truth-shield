@@ -14,6 +14,7 @@ interface Row {
   confidence: number | null;
   title: string | null;
   media_url: string | null;
+  input_preview?: string | null;
   result: any;
   created_at: string;
 }
@@ -109,6 +110,7 @@ export default function History() {
                 verdict: r.verdict,
                 confidence: r.confidence,
                 mediaUrl: r.media_url,
+                inputPreview: r.input_preview,
                 result: r.result,
               }}
               label="PDF"
