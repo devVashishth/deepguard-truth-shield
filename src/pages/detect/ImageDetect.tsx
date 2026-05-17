@@ -6,6 +6,7 @@ import { VerdictCard } from "@/components/VerdictCard";
 import { HeatmapOverlay } from "@/components/HeatmapOverlay";
 import { Button } from "@/components/ui/button";
 import { fileToDataUrl, runAnalysis, uploadMedia } from "@/lib/analyze";
+import { DownloadReportButton } from "@/components/DownloadReportButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -98,6 +99,16 @@ export default function ImageDetect() {
               <>
                 <VerdictCard verdict={result.verdict} confidence={result.confidence} summary={result.summary} />
                 <DetailGrid result={result} />
+                <DownloadReportButton
+                  input={{
+                    type: "image",
+                    title: file?.name,
+                    verdict: result.verdict,
+                    confidence: result.confidence,
+                    mediaUrl: previewUrl,
+                    result,
+                  }}
+                />
               </>
             )}
           </div>

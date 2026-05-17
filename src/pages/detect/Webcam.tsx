@@ -3,6 +3,7 @@ import { Camera, Loader2, Play, Square } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { captureWebcamFrame, runAnalysis } from "@/lib/analyze";
+import { DownloadReportButton } from "@/components/DownloadReportButton";
 import { toast } from "sonner";
 
 export default function Webcam() {
@@ -141,6 +142,15 @@ export default function Webcam() {
                   </ul>
                 </div>
               )}
+              <DownloadReportButton
+                input={{
+                  type: "webcam",
+                  title: `Webcam scan · ${new Date().toLocaleString()}`,
+                  verdict: result.verdict,
+                  confidence: result.confidence,
+                  result,
+                }}
+              />
             </>
           ) : (
             <div className="rounded-2xl border border-dashed border-border p-8 text-center text-muted-foreground bg-card">

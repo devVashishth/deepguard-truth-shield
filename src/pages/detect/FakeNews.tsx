@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { VerdictCard } from "@/components/VerdictCard";
 import { runAnalysis } from "@/lib/analyze";
+import { DownloadReportButton } from "@/components/DownloadReportButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -79,6 +80,16 @@ export default function FakeNews() {
               )}
               <SignalList title="Red flags" items={result.red_flags ?? []} accent="destructive" />
               <SignalList title="Supporting signals" items={result.supporting_signals ?? []} accent="success" />
+              <DownloadReportButton
+                input={{
+                  type: "fakenews",
+                  title: sourceUrl || text.slice(0, 80),
+                  verdict: result.verdict,
+                  confidence: result.confidence,
+                  inputPreview: text.slice(0, 1500),
+                  result,
+                }}
+              />
             </>
           )}
         </div>

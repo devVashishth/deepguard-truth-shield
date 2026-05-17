@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { DownloadReportButton } from "@/components/DownloadReportButton";
 import { toast } from "sonner";
 
 interface Row {
@@ -100,6 +101,18 @@ export default function History() {
             <Button variant="ghost" size="icon" onClick={() => remove(r.id)} aria-label="Delete">
               <Trash2 className="h-4 w-4" />
             </Button>
+            <DownloadReportButton
+              input={{
+                type: r.type as any,
+                title: r.title,
+                createdAt: r.created_at,
+                verdict: r.verdict,
+                confidence: r.confidence,
+                mediaUrl: r.media_url,
+                result: r.result,
+              }}
+              label="PDF"
+            />
           </div>
         ))}
       </div>
