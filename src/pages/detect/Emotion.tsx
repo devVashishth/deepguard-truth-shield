@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Dropzone } from "@/components/Dropzone";
 import { Button } from "@/components/ui/button";
 import { fileToDataUrl, runAnalysis, uploadMedia } from "@/lib/analyze";
+import { DownloadReportButton } from "@/components/DownloadReportButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -118,6 +119,15 @@ export default function Emotion() {
                     {result.notes}
                   </div>
                 )}
+                <DownloadReportButton
+                  input={{
+                    type: "emotion",
+                    title: file ? `${result.dominant} · ${file.name}` : result.dominant,
+                    confidence: result.confidence,
+                    mediaUrl: previewUrl,
+                    result,
+                  }}
+                />
               </>
             )}
           </div>

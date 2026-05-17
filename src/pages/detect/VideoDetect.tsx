@@ -5,6 +5,7 @@ import { Dropzone } from "@/components/Dropzone";
 import { VerdictCard } from "@/components/VerdictCard";
 import { Button } from "@/components/ui/button";
 import { extractVideoFrames, runAnalysis, uploadMedia } from "@/lib/analyze";
+import { DownloadReportButton } from "@/components/DownloadReportButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -131,6 +132,16 @@ export default function VideoDetect() {
                     ))}
                   </ul>
                 </div>
+                <DownloadReportButton
+                  input={{
+                    type: "video",
+                    title: file?.name,
+                    verdict: result.verdict,
+                    confidence: result.confidence,
+                    mediaUrl: frames[0] ?? null,
+                    result,
+                  }}
+                />
               </>
             )}
           </div>
